@@ -1,4 +1,4 @@
-import { Calendar, Target, Compass, Map, Heart, GraduationCap, Sparkles, ArrowRight, Sprout } from 'lucide-react';
+import { Calendar, Target, Compass, Map, Heart, GraduationCap, Sparkles, ArrowRight } from 'lucide-react';
 import { usePlanner } from '../../context/PlannerContext';
 import type { TabId } from '../../types';
 import { allMomentIds } from '../../data/moments';
@@ -23,10 +23,24 @@ export default function Header() {
       <div className="bg-white border-b border-stone-200/80 shadow-soft">
         <div className="flex items-center h-14 px-4 gap-0 max-w-[1600px] mx-auto">
 
-          {/* Logo + nome */}
+          {/* Logo — só o medalhão (parte superior do PNG) */}
           <div className="flex items-center gap-2.5 pr-4 border-r border-stone-200 flex-shrink-0">
-            <div className="w-8 h-8 bg-brand-500 rounded-xl flex items-center justify-center">
-              <Sprout className="w-4 h-4 text-white" />
+            <div className="relative w-9 h-9 rounded-xl overflow-hidden bg-stone-50 flex items-center justify-center flex-shrink-0">
+              <img
+                src="/images/logo_v1_vertical.png"
+                alt="Eurípedes Barsanulfo"
+                className="w-16 h-16 object-cover object-top scale-110"
+                style={{ marginTop: '-4px' }}
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  const fb = e.currentTarget.nextElementSibling as HTMLElement;
+                  if (fb) fb.style.display = 'flex';
+                }}
+              />
+              {/* Fallback */}
+              <div className="hidden w-full h-full items-center justify-center bg-brand-500 rounded-xl">
+                <span className="text-white text-lg font-black">EB</span>
+              </div>
             </div>
             <div className="hidden sm:block">
               <h1 className="text-[11px] text-stone-800 font-extrabold leading-tight tracking-tight">

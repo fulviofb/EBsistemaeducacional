@@ -1,4 +1,4 @@
-import { BookOpen, Lock, Sparkles, GraduationCap, Sprout } from 'lucide-react';
+import { BookOpen, Lock, Sparkles } from 'lucide-react';
 import { usePlanner } from '../../context/PlannerContext';
 import { regularUnits, specialUnits } from '../../data/units';
 import type { Unit } from '../../types';
@@ -45,8 +45,7 @@ function UnitCard({ unit, index, onClick }: { unit: Unit; index: number; onClick
         ${isAvailable
           ? 'cursor-pointer hover:-translate-y-2 hover:shadow-elevated'
           : 'opacity-50 cursor-not-allowed'
-        }
-        bg-white shadow-card`}
+        } bg-white shadow-card`}
       style={{ animationDelay: `${index * 60}ms` }}
     >
       {!isSpecial && (
@@ -92,17 +91,14 @@ function UnitCard({ unit, index, onClick }: { unit: Unit; index: number; onClick
             </span>
           )}
         </div>
-
         <h3 className={`relative z-10 font-bold text-brand-700 leading-tight mb-1 ${isSpecial ? 'text-sm' : 'text-lg'}`}>
           {unit.name}
         </h3>
-
         {unit.subtitle && (
           <p className="relative z-10 text-sm text-stone-400 font-semibold leading-snug mb-3">
             {unit.subtitle}
           </p>
         )}
-
         {unit.badges.length > 0 && (
           <div className="relative z-10 flex gap-1.5 flex-wrap">
             {unit.badges.map((b, i) => (
@@ -138,15 +134,24 @@ export default function UnitSelection() {
 
         <div className="relative z-10 flex flex-col items-center px-6 py-12 md:py-20">
 
-          {/* Hero */}
+          {/* Hero — logo completa */}
           <div className="text-center max-w-2xl mb-12">
-            <div className="flex items-center justify-center mb-8">
-              <div className="relative">
+            <div className="flex items-center justify-center mb-6">
+              <img
+                src="/images/logo_v1_vertical.png"
+                alt="Eurípedes Barsanulfo — Sistema de Educação"
+                className="h-56 w-auto drop-shadow-md"
+                onError={(e) => {
+                  // Fallback se a imagem não carregar ainda
+                  e.currentTarget.style.display = 'none';
+                  const fb = e.currentTarget.nextElementSibling as HTMLElement;
+                  if (fb) fb.style.display = 'flex';
+                }}
+              />
+              {/* Fallback enquanto imagem não está disponível */}
+              <div className="hidden flex-col items-center justify-center gap-2">
                 <div className="w-20 h-20 bg-white rounded-3xl shadow-card flex items-center justify-center">
-                  <Sprout className="w-10 h-10 text-sage-500" />
-                </div>
-                <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-gold-400 rounded-full flex items-center justify-center shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5 text-white" />
+                  <span className="text-4xl">🌱</span>
                 </div>
               </div>
             </div>
@@ -156,17 +161,13 @@ export default function UnitSelection() {
               <span className="font-display italic text-brand-500">Educador</span>
             </h1>
 
-            <p className="text-base text-stone-500 font-semibold mb-1">
-              Eurípedes Barsanulfo · Sistema Educacional
-            </p>
             <p className="text-sm text-stone-400 font-medium mb-6">
               Educação Infantil · A partir de 3 anos
             </p>
 
             <div className="inline-flex items-center gap-2.5 bg-white border border-stone-200 rounded-full px-5 py-2.5 shadow-soft">
-              <GraduationCap className="w-4 h-4 text-brand-400" />
               <span className="text-xs font-extrabold text-stone-500 uppercase tracking-[1.5px]">
-                Educação Infantil
+                📖 Educação Infantil
               </span>
             </div>
           </div>
