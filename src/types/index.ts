@@ -5,6 +5,8 @@ export interface Unit {
   badges: { label: string; color: string }[];
   available: boolean;
   special?: boolean;
+  emoji?: string;
+  description?: string;
 }
 
 export interface MomentTemplate {
@@ -17,6 +19,7 @@ export interface MomentTemplate {
   campos: string[];
   badge?: { label: string; color: string };
   isBreak?: boolean;
+  isDifferentiator?: boolean;
 }
 
 export interface PlannedData {
@@ -24,6 +27,9 @@ export interface PlannedData {
   mat: string;
   obs: string;
 }
+
+// Estrutura por aula: dp[momentoId][aulaId] = PlannedData
+export type PlannedDataByLesson = Record<number, Record<string, PlannedData>>;
 
 export interface Activity {
   id: number;
@@ -40,11 +46,24 @@ export type ActivityType = 'corpo' | 'arte' | 'linguagem' | 'cognitiva' | 'espir
 
 export type TabId = 'rotina' | 'banco' | 'campos' | 'jornada' | 'espirita' | 'orient' | 'alem';
 
+export type LessonId = 'aula1' | 'aula2' | 'aula3' | 'aula4';
+
 export interface LessonGuidance {
   num: number;
   title: string;
   color: string;
+  contexto: string;
   objectives?: { code: string; text: string }[];
   action: string;
   fono: { sound: string; text: string };
+  sugestoes: Record<number, string>;
+}
+
+export interface UnitReference {
+  historia: string;
+  quadrinha: string;
+  quadrinhaFonte: string;
+  esperanto: string;
+  atitude: string;
+  citacoes: { texto: string; fonte: string }[];
 }

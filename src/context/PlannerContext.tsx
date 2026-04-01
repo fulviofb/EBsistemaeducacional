@@ -1,26 +1,30 @@
-import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react';
-import type { TabId, PlannedData, Activity } from '../types';
+import { createContext, useContext, useReducer, useEffect, useState, type ReactNode } from 'react';
+import type { TabId, PlannedData, Activity, LessonId } from '../types';
 
 interface PlannerState {
   selectedUnit: number | null;
   activeTab: TabId;
   activeMoment: number | null;
-  plannedData: Record<number, PlannedData>;
+  activeLesson: LessonId;
+  // Estrutura: plannedData[momentoId][aulaId] = PlannedData  (D1 — dados por aula)
+  plannedData: Record<number, Record<string, PlannedData>>;
   extraActivities: Activity[];
 }
 
 type Action =
-  | { type: 'SELECT_UNIT'; unit: number }
-  | { type: 'SET_TAB'; tab: TabId }
-  | { type: 'SET_MOMENT'; id: number | null }
-  | { type: 'SAVE_MOMENT'; id: number; data: PlannedData }
-  | { type: 'ADD_ACTIVITY'; activity: Activity }
+  | { type: 'SELECT_UNIT';    unit: number }
+  | { type: 'SET_TAB';        tab: TabId }
+  | { type: 'SET_MOMENT';     id: number | null }
+  | { type: 'SET_LESSON';     lesson: LessonId }
+  | { type: 'SAVE_MOMENT';    id: number; lesson: LessonId; data: PlannedData }
+  | { type: 'ADD_ACTIVITY';   activity: Activity }
   | { type: 'BACK_TO_UNITS' };
 
 const initialState: PlannerState = {
   selectedUnit: null,
   activeTab: 'rotina',
   activeMoment: null,
+  activeLesson: 'aula1',
   plannedData: {},
   extraActivities: [],
 };
@@ -28,13 +32,23 @@ const initialState: PlannerState = {
 function reducer(state: PlannerState, action: Action): PlannerState {
   switch (action.type) {
     case 'SELECT_UNIT':
-      return { ...state, selectedUnit: action.unit, activeTab: 'rotina', activeMoment: null };
+      return { ...state, selectedUnit: action.unit, activeTab: 'rotina', activeMoment: null, activeLesson: 'aula1' };
     case 'SET_TAB':
       return { ...state, activeTab: action.tab };
     case 'SET_MOMENT':
       return { ...state, activeMoment: action.id };
-    case 'SAVE_MOMENT':
-      return { ...state, plannedData: { ...state.plannedData, [action.id]: action.data } };
+    case 'SET_LESSON':
+      return { ...state, activeLesson: action.lesson, activeMoment: null };
+    case 'SAVE_MOMENT': {
+      const existing = state.plannedData[action.id] || {};
+      return {
+        ...state,
+        plannedData: {
+          ...state.plannedData,
+          [action.id]: { ...existing, [action.lesson]: action.data },
+        },
+      };
+    }
     case 'ADD_ACTIVITY':
       return { ...state, extraActivities: [...state.extraActivities, action.activity] };
     case 'BACK_TO_UNITS':
@@ -44,7 +58,7 @@ function reducer(state: PlannerState, action: Action): PlannerState {
   }
 }
 
-const STORAGE_KEY = 'guia-educador-state';
+const STORAGE_KEY = 'guia-educador-v7';
 
 function loadState(): PlannerState {
   try {
@@ -72,11 +86,14 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
-    const { selectedUnit, plannedData, extraActivities } = state;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ selectedUnit, plannedData, extraActivities }));
+    const { selectedUnit, plannedData, extraActivities, activeLesson } = state;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ selectedUnit, plannedData, extraActivities, activeLesson }));
   }, [state]);
 
-  const filledCount = Object.values(state.plannedData).filter(d => d.atv.trim()).length;
+  // filledCount: momentos preenchidos na aula ativa
+  const filledCount = Object.values(state.plannedData)
+    .filter(byLesson => byLesson[state.activeLesson]?.atv?.trim())
+    .length;
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -89,8 +106,6 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     </PlannerContext.Provider>
   );
 }
-
-import { useState } from 'react';
 
 export function usePlanner() {
   const ctx = useContext(PlannerContext);
