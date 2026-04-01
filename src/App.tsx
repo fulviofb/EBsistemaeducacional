@@ -13,16 +13,15 @@ import BeyondActivities from './components/tabs/BeyondActivities';
 
 function ActiveTab() {
   const { state } = usePlanner();
-
   switch (state.activeTab) {
-    case 'rotina': return <RoutinePlanner />;
-    case 'banco': return <ActivityBank />;
-    case 'campos': return <ExperienceFields />;
-    case 'jornada': return <WeeklyJourney />;
+    case 'rotina':   return <RoutinePlanner />;
+    case 'banco':    return <ActivityBank />;
+    case 'campos':   return <ExperienceFields />;
+    case 'jornada':  return <WeeklyJourney />;
     case 'espirita': return <SpiritualContent />;
-    case 'orient': return <TeacherGuidance />;
-    case 'alem': return <BeyondActivities />;
-    default: return <RoutinePlanner />;
+    case 'orient':   return <TeacherGuidance />;
+    case 'alem':     return <BeyondActivities />;
+    default:         return <RoutinePlanner />;
   }
 }
 
@@ -36,8 +35,9 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-cream-100">
       <Header />
-      <div className="flex">
-        <main className="flex-1 min-w-0 p-4 md:p-6 pb-24 lg:mr-[384px]">
+      <div className="flex relative">
+        {/* Main — no mobile ocupa 100%; no desktop dá espaço para a sidebar */}
+        <main className="flex-1 min-w-0 p-4 md:p-6 pb-24 lg:mr-96">
           <ActiveTab />
         </main>
         <Sidebar />
