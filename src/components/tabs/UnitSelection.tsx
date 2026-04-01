@@ -4,29 +4,48 @@ import { regularUnits, specialUnits } from '../../data/units';
 import type { Unit } from '../../types';
 import Confetti from '../ui/Confetti';
 
-const unitImages = [
-  'https://images.pexels.com/photos/8613089/pexels-photo-8613089.jpeg?auto=compress&cs=tinysrgb&w=400&h=260&dpr=1',
-  'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=400&h=260&dpr=1',
-  'https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=400&h=260&dpr=1',
-  'https://images.pexels.com/photos/8363104/pexels-photo-8363104.jpeg?auto=compress&cs=tinysrgb&w=400&h=260&dpr=1',
-  'https://images.pexels.com/photos/8535214/pexels-photo-8535214.jpeg?auto=compress&cs=tinysrgb&w=400&h=260&dpr=1',
-  'https://images.pexels.com/photos/8363028/pexels-photo-8363028.jpeg?auto=compress&cs=tinysrgb&w=400&h=260&dpr=1',
-  'https://images.pexels.com/photos/8612990/pexels-photo-8612990.jpeg?auto=compress&cs=tinysrgb&w=400&h=260&dpr=1',
-  'https://images.pexels.com/photos/8613312/pexels-photo-8613312.jpeg?auto=compress&cs=tinysrgb&w=400&h=260&dpr=1',
+// Ilustrações geradas — colocar em public/images/u1.png ... u8.png
+// Fallback para gradiente enquanto a imagem não existe
+const unitImages: string[] = [
+  '/images/u1.png',
+  '/images/u2.png',
+  '/images/u3.png',
+  '/images/u4.png',
+  '/images/u5.png',
+  '/images/u6.png',
+  '/images/u7.png',
+  '/images/u8.png',
 ];
+
+// Gradientes de fallback por unidade (usados se a imagem não carregar)
+const unitGradients: string[] = [
+  'linear-gradient(135deg, #eef7f2 0%, #c8e6d0 100%)',
+  'linear-gradient(135deg, #fef0f5 0%, #fde0ea 100%)',
+  'linear-gradient(135deg, #f0f5fe 0%, #d8e8fc 100%)',
+  'linear-gradient(135deg, #eef7f2 0%, #d0eadc 100%)',
+  'linear-gradient(135deg, #fff8ee 0%, #fde8c8 100%)',
+  'linear-gradient(135deg, #fef0f5 0%, #fde0ea 100%)',
+  'linear-gradient(135deg, #f5f0fe 0%, #e8d8fc 100%)',
+  'linear-gradient(135deg, #fff8ee 0%, #fde8c8 100%)',
+];
+
+const unitEmojis = ['🏫','🌸','🏡','🌿','🤗','👨‍👩‍👧','⭐','💛'];
 
 const badgeStyles: Record<string, string> = {
   IME: 'bg-sage-200 text-sage-700 border border-sage-300',
-  EO: 'bg-peach-100 text-peach-500 border border-peach-200',
-  TS: 'bg-sky-100 text-sky-500 border border-sky-200',
-  CG: 'bg-brand-100 text-brand-600 border border-brand-200',
-  EF: 'bg-mint-100 text-mint-500 border border-mint-200',
-  ET: 'bg-gold-100 text-gold-600 border border-gold-200',
+  EO:  'bg-peach-100 text-peach-500 border border-peach-200',
+  TS:  'bg-sky-100 text-sky-500 border border-sky-200',
+  CG:  'bg-brand-100 text-brand-600 border border-brand-200',
+  EF:  'bg-mint-100 text-mint-500 border border-mint-200',
+  ET:  'bg-gold-100 text-gold-600 border border-gold-200',
 };
 
 function UnitCard({ unit, index, onClick }: { unit: Unit; index: number; onClick?: () => void }) {
   const isAvailable = unit.available;
   const isSpecial = unit.special;
+  const imgSrc = unitImages[index % unitImages.length];
+  const gradient = unitGradients[index % unitGradients.length];
+  const emoji = unitEmojis[index % unitEmojis.length];
 
   return (
     <div
@@ -39,14 +58,32 @@ function UnitCard({ unit, index, onClick }: { unit: Unit; index: number; onClick
         bg-white shadow-card`}
       style={{ animationDelay: `${index * 60}ms` }}
     >
+      {/* Imagem da unidade */}
       {!isSpecial && (
-        <div className="relative h-40 overflow-hidden">
+        <div
+          className="relative overflow-hidden"
+          style={{ aspectRatio: '4/3' }}
+        >
           <img
-            src={unitImages[index % unitImages.length]}
+            src={imgSrc}
             alt={unit.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            onError={(e) => {
+              // Fallback: esconde img e mostra gradiente com emoji
+              const target = e.currentTarget;
+              target.style.display = 'none';
+              const fallback = target.nextElementSibling as HTMLElement;
+              if (fallback) fallback.style.display = 'flex';
+            }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+          {/* Fallback visível apenas se imagem falhar */}
+          <div
+            className="absolute inset-0 items-center justify-center text-6xl"
+            style={{ display: 'none', background: gradient }}
+          >
+            {emoji}
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent" />
         </div>
       )}
 
@@ -58,10 +95,11 @@ function UnitCard({ unit, index, onClick }: { unit: Unit; index: number; onClick
             {isSpecial ? `E${unit.id - 100}` : String(unit.id).padStart(2, '0')}
           </div>
           {isAvailable ? (
-            <span className="bg-gold-100 text-gold-700 text-[10px] font-black uppercase tracking-wide px-3 py-1 rounded-full border border-gold-300"
+            <span
+              className="bg-gold-100 text-gold-700 text-[10px] font-black uppercase tracking-wide px-3 py-1 rounded-full border border-gold-300"
               style={{ fontVariant: 'small-caps' }}
             >
-              Disponivel
+              Disponível
             </span>
           ) : (
             <span className="flex items-center gap-1 bg-stone-100 text-stone-400 text-[9px] font-black uppercase tracking-wide px-2 py-1 rounded-full">
@@ -76,14 +114,22 @@ function UnitCard({ unit, index, onClick }: { unit: Unit; index: number; onClick
         </h3>
 
         {unit.subtitle && (
-          <p className="relative z-10 text-sm text-stone-400 font-semibold leading-snug mb-3">{unit.subtitle}</p>
+          <p className="relative z-10 text-sm text-stone-400 font-semibold leading-snug mb-3">
+            {unit.subtitle}
+          </p>
         )}
 
         {unit.badges.length > 0 && (
           <div className="relative z-10 flex gap-1.5 flex-wrap">
             {unit.badges.map((b, i) => (
-              <span key={i} className={`text-[10px] font-extrabold uppercase tracking-wide px-2.5 py-1 rounded-lg
-                ${isAvailable ? (badgeStyles[b.label] || 'bg-stone-100 text-stone-500') : 'bg-stone-100 text-stone-300 border border-stone-200'}`}>
+              <span
+                key={i}
+                className={`text-[10px] font-extrabold uppercase tracking-wide px-2.5 py-1 rounded-lg
+                  ${isAvailable
+                    ? (badgeStyles[b.label] || 'bg-stone-100 text-stone-500')
+                    : 'bg-stone-100 text-stone-300 border border-stone-200'
+                  }`}
+              >
                 {b.label}
               </span>
             ))}
@@ -107,6 +153,8 @@ export default function UnitSelection() {
         </div>
 
         <div className="relative z-10 flex flex-col items-center px-6 py-12 md:py-20">
+
+          {/* Hero */}
           <div className="text-center max-w-2xl mb-12">
             <div className="flex items-center justify-center mb-8">
               <div className="relative">
@@ -124,18 +172,22 @@ export default function UnitSelection() {
               <span className="font-display italic text-brand-500">Educador</span>
             </h1>
 
-            <p className="text-base text-stone-400 font-semibold mb-5">
-              IEE Euripedes Barsanulfo - Maternal 2 (3 anos)
+            <p className="text-base text-stone-400 font-semibold mb-1">
+              Eurípedes Barsanulfo · Sistema Educacional
+            </p>
+            <p className="text-sm text-stone-300 font-semibold mb-5">
+              Maternal 2 · 3 anos · Educação Infantil
             </p>
 
             <div className="inline-flex items-center gap-2.5 bg-white border border-stone-200 rounded-full px-5 py-2.5 shadow-soft">
               <GraduationCap className="w-4 h-4 text-brand-400" />
               <span className="text-xs font-extrabold text-stone-500 uppercase tracking-[1.5px]">
-                Educacao Infantil
+                Educação Infantil
               </span>
             </div>
           </div>
 
+          {/* Aulas Regulares */}
           <div className="w-full max-w-6xl mb-10">
             <div className="flex items-center gap-2.5 text-[11px] font-black uppercase tracking-[1.5px] text-stone-400 mb-5">
               <BookOpen className="w-4 h-4 text-brand-400" />
@@ -154,11 +206,12 @@ export default function UnitSelection() {
             </div>
           </div>
 
+          {/* Aulas Especiais */}
           <div className="w-full max-w-6xl mb-10">
             <div className="flex items-center gap-2.5 text-[11px] font-black uppercase tracking-[1.5px] text-stone-400 mb-5">
               <Sparkles className="w-4 h-4 text-gold-400" />
               Aulas Especiais
-              <span className="bg-gold-50 text-gold-600 rounded-full px-2.5 py-0.5 text-[10px]">9 unidades</span>
+              <span className="bg-gold-50 text-gold-600 rounded-full px-2.5 py-0.5 text-[10px]">9 unidades · Datas comemorativas</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
               {specialUnits.map((unit, i) => (
@@ -168,7 +221,7 @@ export default function UnitSelection() {
           </div>
 
           <div className="text-center mt-6 text-xs text-stone-300 font-semibold">
-            IEE Euripedes Barsanulfo - Sistema de Ensino Espirita - Maternal 2
+            Eurípedes Barsanulfo · Sistema Educacional · Maternal 2
           </div>
         </div>
       </div>
