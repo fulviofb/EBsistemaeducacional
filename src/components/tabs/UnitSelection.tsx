@@ -4,20 +4,11 @@ import { regularUnits, specialUnits } from '../../data/units';
 import type { Unit } from '../../types';
 import Confetti from '../ui/Confetti';
 
-// Ilustrações geradas — colocar em public/images/u1.png ... u8.png
-// Fallback para gradiente enquanto a imagem não existe
 const unitImages: string[] = [
-  '/images/u1.png',
-  '/images/u2.png',
-  '/images/u3.png',
-  '/images/u4.png',
-  '/images/u5.png',
-  '/images/u6.png',
-  '/images/u7.png',
-  '/images/u8.png',
+  '/images/u1.png','/images/u2.png','/images/u3.png','/images/u4.png',
+  '/images/u5.png','/images/u6.png','/images/u7.png','/images/u8.png',
 ];
 
-// Gradientes de fallback por unidade (usados se a imagem não carregar)
 const unitGradients: string[] = [
   'linear-gradient(135deg, #eef7f2 0%, #c8e6d0 100%)',
   'linear-gradient(135deg, #fef0f5 0%, #fde0ea 100%)',
@@ -58,25 +49,19 @@ function UnitCard({ unit, index, onClick }: { unit: Unit; index: number; onClick
         bg-white shadow-card`}
       style={{ animationDelay: `${index * 60}ms` }}
     >
-      {/* Imagem da unidade */}
       {!isSpecial && (
-        <div
-          className="relative overflow-hidden"
-          style={{ aspectRatio: '4/3' }}
-        >
+        <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
           <img
             src={imgSrc}
             alt={unit.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             onError={(e) => {
-              // Fallback: esconde img e mostra gradiente com emoji
               const target = e.currentTarget;
               target.style.display = 'none';
               const fallback = target.nextElementSibling as HTMLElement;
               if (fallback) fallback.style.display = 'flex';
             }}
           />
-          {/* Fallback visível apenas se imagem falhar */}
           <div
             className="absolute inset-0 items-center justify-center text-6xl"
             style={{ display: 'none', background: gradient }}
@@ -89,7 +74,6 @@ function UnitCard({ unit, index, onClick }: { unit: Unit; index: number; onClick
 
       <div className={`relative ${isSpecial ? 'p-4' : 'p-5'}`}>
         <Confetti count={8} />
-
         <div className="relative z-10 flex items-start justify-between mb-2">
           <div className="font-mono text-3xl text-brand-200 leading-none font-medium">
             {isSpecial ? `E${unit.id - 100}` : String(unit.id).padStart(2, '0')}
@@ -172,11 +156,11 @@ export default function UnitSelection() {
               <span className="font-display italic text-brand-500">Educador</span>
             </h1>
 
-            <p className="text-base text-stone-400 font-semibold mb-1">
+            <p className="text-base text-stone-500 font-semibold mb-1">
               Eurípedes Barsanulfo · Sistema Educacional
             </p>
-            <p className="text-sm text-stone-300 font-semibold mb-5">
-              Maternal 2 · 3 anos · Educação Infantil
+            <p className="text-sm text-stone-400 font-medium mb-6">
+              Educação Infantil · A partir de 3 anos
             </p>
 
             <div className="inline-flex items-center gap-2.5 bg-white border border-stone-200 rounded-full px-5 py-2.5 shadow-soft">
@@ -191,7 +175,7 @@ export default function UnitSelection() {
           <div className="w-full max-w-6xl mb-10">
             <div className="flex items-center gap-2.5 text-[11px] font-black uppercase tracking-[1.5px] text-stone-400 mb-5">
               <BookOpen className="w-4 h-4 text-brand-400" />
-              Aulas Regulares
+              Unidades Regulares
               <span className="bg-brand-50 text-brand-500 rounded-full px-2.5 py-0.5 text-[10px]">8 unidades</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -210,7 +194,7 @@ export default function UnitSelection() {
           <div className="w-full max-w-6xl mb-10">
             <div className="flex items-center gap-2.5 text-[11px] font-black uppercase tracking-[1.5px] text-stone-400 mb-5">
               <Sparkles className="w-4 h-4 text-gold-400" />
-              Aulas Especiais
+              Unidades Especiais
               <span className="bg-gold-50 text-gold-600 rounded-full px-2.5 py-0.5 text-[10px]">9 unidades · Datas comemorativas</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -221,7 +205,7 @@ export default function UnitSelection() {
           </div>
 
           <div className="text-center mt-6 text-xs text-stone-300 font-semibold">
-            Eurípedes Barsanulfo · Sistema Educacional · Maternal 2
+            Eurípedes Barsanulfo · Sistema Educacional · Educação Infantil
           </div>
         </div>
       </div>
