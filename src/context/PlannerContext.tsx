@@ -6,7 +6,6 @@ interface PlannerState {
   activeTab: TabId;
   activeMoment: number | null;
   activeLesson: LessonId;
-  // Estrutura: plannedData[momentoId][aulaId] = PlannedData  (D1 — dados por aula)
   plannedData: Record<number, Record<string, PlannedData>>;
   extraActivities: Activity[];
 }
@@ -21,7 +20,7 @@ type Action =
   | { type: 'BACK_TO_UNITS' };
 
 const initialState: PlannerState = {
-  selectedUnit: null,
+  selectedUnit: null,  // sempre começa na tela de seleção
   activeTab: 'rotina',
   activeMoment: null,
   activeLesson: 'aula1',
@@ -65,7 +64,15 @@ function loadState(): PlannerState {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      return { ...initialState, ...parsed };
+      return {
+        ...initialState,
+        // Restaura apenas os dados de planejamento — nunca a unidade selecionada
+        // O professor sempre começa na tela de seleção de unidades
+        plannedData: parsed.plannedData || {},
+        extraActivities: parsed.extraActivities || [],
+        activeLesson: parsed.activeLesson || 'aula1',
+        // selectedUnit: null — intencional, sempre abre na tela de unidades
+      };
     }
   } catch { /* ignore */ }
   return initialState;
@@ -86,8 +93,9 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
-    const { selectedUnit, plannedData, extraActivities, activeLesson } = state;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ selectedUnit, plannedData, extraActivities, activeLesson }));
+    // Salva dados de planejamento mas não a unidade selecionada
+    const { plannedData, extraActivities, activeLesson } = state;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ plannedData, extraActivities, activeLesson }));
   }, [state]);
 
   // filledCount: momentos preenchidos na aula ativa
