@@ -17,83 +17,126 @@
 - [x] Jornada da Semana com visão das 4 aulas
 - [x] Logo institucional Eurípedes Barsanulfo
 - [x] Sidebar responsiva (mobile + desktop)
+- [x] Atividades sugeridas por momento na sidebar
 
 ---
 
 ## 🔵 Próximas etapas — Melhorias imediatas
 
 ### 1. Campos de Experiência — Detalhamento BNCC
-- [ ] Expandir a aba "Campos de Exp." com o detalhamento completo de cada habilidade do BNCC
-- [ ] Para cada código (ex: EI02EO01), exibir: descrição oficial, objetivos de aprendizagem, exemplos práticos
+- [ ] Expandir a aba "Campos de Exp." com o detalhamento completo de cada habilidade
+- [ ] Para cada código (ex: EI02EO01), exibir: descrição oficial, objetivos, exemplos práticos
 - [ ] Filtro por campo (IME, EO, CG, TS, EF, ET, PC)
 - [ ] Vinculação direta com os momentos que trabalham cada habilidade
 - **Referência:** Base Nacional Curricular Comum — Educação Infantil
 
 ### 2. Caderno de Atividades — Clareza e integração
 - O Caderno de Atividades é um **material impresso** entregue aos alunos
-- Cada aula tem uma atividade específica no caderno (Atividade 1, 2, 3, 4)
-- A equipe pedagógica ainda está desenvolvendo a parte gráfica final
+- Cada aula tem uma atividade específica (Atividade 1, 2, 3, 4 por unidade)
+- A equipe CEEE ainda está desenvolvendo a parte gráfica final
 - **O que o sistema precisa fazer:**
-  - [ ] Tornar mais claro na aba "Orientações" que o Momento 16 (Caderno) é vinculado ao caderno impresso
-  - [ ] Exibir a instrução da atividade do caderno correspondente a cada aula
-  - [ ] Quando o caderno gráfico estiver pronto: disponibilizar PDF para download por unidade/aula
-  - [ ] Área de preview da página do caderno correspondente à aula (como a imagem referência: citação + instrução + espaço para atividade)
+  - [ ] Tornar explícito que o Momento 16 é vinculado ao caderno físico impresso
+  - [ ] Exibir a instrução da atividade do caderno para cada aula (ex: "Faça um desenho de gratidão ao(à) professor(a)")
+  - [ ] Quando o design gráfico final estiver pronto: PDF do caderno disponível por unidade/aula
+  - [ ] Preview da página do caderno: citação âncora + instrução ao professor + espaço da atividade
 
 ---
 
 ## 🟡 Fase 2 — Autenticação e Perfis
 
-### 3. Página de Login
-- [ ] Tela de login institucional com a identidade visual do Sistema EB
+### 3. Página de Login institucional
+- [ ] Tela de login com identidade visual do Sistema EB
 - [ ] Dois perfis de acesso:
   - **Professor(a):** acessa o Guia do Educador, planeja aulas, registra observações
   - **Coordenador(a) / Diretor(a):** visão geral de todas as turmas, acompanhamento dos planos
 - [ ] Integração com Supabase Auth (email + senha ou SSO institucional)
-- [ ] Dados do professor salvos na nuvem (hoje são salvos só no localStorage)
-- [ ] Coordenador(a) pode ver e comentar os planos dos professores
+- [ ] Dados do professor salvos na nuvem (hoje: localStorage apenas)
+- [ ] Coordenador pode visualizar e comentar os planos dos professores
 
 ### 4. Persistência em nuvem
-- [ ] Migrar de localStorage para Supabase (banco já conectado)
-- [ ] Estrutura: `planejamentos[escola_id][professor_id][unidade][aula][momento]`
+- [ ] Migrar de localStorage para Supabase
+- [ ] Estrutura: `planejamentos[escola][professor][unidade][aula][momento]`
 - [ ] Histórico de planejamentos por semana/mês
 - [ ] Exportação em lote dos planos da turma
 
 ---
 
-## 🟠 Fase 3 — Acompanhamento do Aluno
-
-### 5. Módulo de Registro de Desenvolvimento (inspirado no Escribo Primeira Infância)
-- Referência: https://escribo.com/escribo-primeira-infancia/
-- O professor registra o desenvolvimento de cada criança durante e após as aulas
-- **Funcionalidades previstas:**
-  - [ ] Registro por momento/atividade: o que a criança fez, como reagiu, dificuldades
-  - [ ] Upload de fotos das atividades realizadas (portfólio digital)
-  - [ ] Avaliação por competência/habilidade BNCC por criança
-  - [ ] Relatório de desenvolvimento individual por criança (para família)
-  - [ ] Relatório de turma para o coordenador
-  - [ ] Possível integração ou link com o Escribo se houver API disponível
-- **Formato:** pode ser aplicativo mobile dedicado (PWA ou React Native) com link para o Guia do Educador
-- **A estudar:** verificar API/parceria com Escribo · avaliar desenvolvimento próprio vs integração
-
-### 6. Comunicação com a Família
-- [ ] Relatório de desenvolvimento para envio às famílias (PDF ou link)
-- [ ] Registro das atividades do Caderno de Atividades realizadas
+## 🟠 Fase 3 — Módulos OBSERVAR e PLANEJAR
+> Inspirados nos módulos homônimos do Escribo Primeira Infância.
+> O IEE precisa de funcionalidade equivalente, integrada ao seu currículo espírita e à rotina de 24 momentos.
 
 ---
 
-## 🔴 Fase 4 — Expansão do Sistema
+### 5. Módulo OBSERVAR — Registro do desenvolvimento da criança
 
-### 7. Ensino Fundamental I–IX
-- O sistema atual cobre Educação Infantil (a partir de 3 anos)
-- Estrutura pedagógica do Fundamental é diferente: matérias por disciplina, múltiplos professores, períodos de 50 min
-- [ ] Definir o "container" pedagógico do Fundamental (equivalente aos 24 momentos da EI)
+> *"Registrar a vida escolar dos estudantes de forma ágil, leve e aderente à dinâmica da sala de aula."*
+
+O professor registra o que acontece com cada criança durante e após as aulas, gerando relatórios de aprendizagem para as famílias e a coordenação.
+
+**Funcionalidades previstas:**
+
+- [ ] **Cadastro de alunos por turma** — nome, foto, data de nascimento, responsável
+- [ ] **Registro por momento/atividade** — campo rápido: o que a criança fez, como reagiu, dificuldades, conquistas
+- [ ] **Avaliação formativa por habilidade BNCC** — para cada código (EI02EO01 etc.), registrar: Iniciando / Em desenvolvimento / Consolidado
+- [ ] **Upload de fotos e evidências** — portfólio digital de cada criança
+- [ ] **IA para síntese** — a partir dos registros, gerar rascunho do relatório em linguagem adequada para família
+- [ ] **Relatório individual por criança** — customizado com identidade visual do Sistema EB, imprimível
+- [ ] **Relatório de turma** — para reuniões pedagógicas e formação de professores
+- [ ] **Intervenções** — identificar crianças que precisam de atenção individualizada ou coletiva
+
+**Formato de uso:** prioritariamente mobile (celular do professor em sala), com sincronização automática
+
+---
+
+### 6. Módulo PLANEJAR — Gestão pedagógica integrada
+
+> *"Criar planejamento, organizar agenda de trabalho e gerir o processo de ensino a partir do currículo, do calendário e dos recursos disponíveis."*
+
+Evolução do Guia do Educador atual para uma gestão pedagógica completa da escola.
+
+**Funcionalidades previstas:**
+
+- [ ] **Calendário letivo** — a escola cadastra datas, feriados, eventos especiais
+- [ ] **Agenda por professor e turma** — gerada automaticamente a partir do calendário + unidades
+- [ ] **Objetivos de curto prazo** — por bimestre/trimestre, por turma
+- [ ] **Intencionalidade educativa** — cada atividade vinculada a um objetivo de aprendizagem
+- [ ] **Gestão do dia a dia** — professor marca o que foi realizado, o que precisou ser adaptado
+- [ ] **Coleta de dados para reuniões** — dados do OBSERVAR alimentam pautas pedagógicas
+- [ ] **Replanejamento** — ajuste dos próximos bimestres com base nos dados coletados
+- [ ] **IA para sugestões** — baseado nos registros do OBSERVAR, sugerir adaptações no planejamento
+
+---
+
+### 7. Análise estratégica — Desenvolver próprio vs. integrar Escribo
+
+| Critério | Desenvolvimento próprio | Integração Escribo |
+|---|---|---|
+| **Aderência ao currículo espírita** | ✅ Total — IME, 24 momentos, história âncora | ❌ Nenhuma — currículo secular genérico |
+| **Identidade visual IEE** | ✅ Completa | ❌ Identidade Escribo |
+| **Custo** | Desenvolvimento único | Licença recorrente por escola/aluno |
+| **Velocidade** | Mais lento | Mais rápido |
+| **Dados** | ✅ Propriedade do IEE | ❌ Dados na plataforma Escribo |
+| **Escala (44 escolas)** | ✅ Controlado | Depende de negociação |
+| **IA integrada** | ✅ Claude API já disponível | Própria do Escribo |
+
+**Recomendação:** desenvolver módulos próprios OBSERVAR e PLANEJAR, integrados ao Guia do Educador já existente.
+O currículo espírita, os 24 momentos e a identidade do Sistema EB são diferenciais que nenhuma plataforma externa vai reproduzir.
+
+---
+
+## 🔴 Fase 4 — Expansão da Rede
+
+### 8. Ensino Fundamental I–IX
+- Sistema atual cobre Educação Infantil (a partir de 3 anos)
+- Fundamental tem estrutura diferente: disciplinas, múltiplos professores, períodos de 50 min
+- [ ] Definir o "container" pedagógico do Fundamental (após EI validada)
 - [ ] Adaptar o Guia do Educador para a estrutura do Fundamental
 - [ ] Manter unificado na mesma plataforma
 
-### 8. Rede de Escolas
-- O IEE possui 44 escolas operacionais + internacionais (Angola e Honduras)
+### 9. Rede de 44 escolas + internacionais
+- IEE possui 44 escolas operacionais + Angola e Honduras
 - [ ] Multi-escola: cada escola com seus professores e coordenadores
-- [ ] Dashboard da rede para a coordenação nacional (OSCEIA/CEEE)
+- [ ] Dashboard da rede para coordenação nacional (OSCEIA/CEEE)
 - [ ] Gestão de acesso por escola/mantenedora
 
 ---
@@ -102,25 +145,28 @@
 
 | Decisão | Status | Responsável |
 |---|---|---|
-| Graphic design final do Caderno de Atividades | ⏳ Em desenvolvimento | Equipe CEEE |
+| Design gráfico final do Caderno de Atividades | ⏳ Em desenvolvimento | Equipe CEEE |
 | Modelo de autenticação (SSO vs email) | 🔍 A definir | Fulvio + TI |
-| Desenvolvimento próprio vs integração Escribo | 🔍 A estudar | Fulvio + equipe |
+| OBSERVAR: dev próprio vs integração Escribo | 🔍 **Recomendado: dev próprio** | Fulvio + equipe |
 | Cronograma do Fundamental I | ⏳ Aguardando EI validada | CEEE |
 | Ilustrações unidades 5–8 | ⏳ Pendente geração Gemini | Fulvio |
+| Modelo de dados Supabase (multi-escola) | 🔍 A definir | Fulvio + TI |
 
 ---
 
-## 🛠 Stack técnica atual
+## 🛠 Stack técnica
 
-| Camada | Tecnologia |
-|---|---|
-| Frontend | React + TypeScript + Vite + Tailwind CSS |
-| Hospedagem | Vercel (auto-deploy via GitHub) |
-| Repositório | GitHub — fulviofb/EBsistemaeducacional |
-| Banco (futuro) | Supabase (já conectado) |
-| Auth (futuro) | Supabase Auth |
-| Mobile (futuro) | PWA ou React Native |
+| Camada | Tecnologia | Status |
+|---|---|---|
+| Frontend | React + TypeScript + Vite + Tailwind CSS | ✅ Em produção |
+| Hospedagem | Vercel (auto-deploy via GitHub) | ✅ Em produção |
+| Repositório | GitHub — fulviofb/EBsistemaeducacional | ✅ Ativo |
+| Banco de dados | Supabase | 🔍 Conectado, aguardando auth |
+| Autenticação | Supabase Auth | 🔍 Fase 2 |
+| IA (relatórios/sugestões) | Claude API (Anthropic) | 🔍 Fase 3 |
+| Mobile | PWA (prioridade) → React Native (futuro) | 🔍 Fase 3 |
 
 ---
 
 *Eurípedes Barsanulfo · Sistema Educacional · IEE*
+*44 escolas operacionais · Angola · Honduras*
